@@ -19,6 +19,19 @@ export const queryDrafts: QueryDrafts = async function queryDrafts(
 
   const combinedWhere = combineQueries({ latest: { equals: true } }, where)
 
+  console.log('find many with: ', {
+    collection,
+    joins,
+    limit,
+    locale,
+    page,
+    pagination,
+    req,
+    select,
+    sort,
+    versions: true,
+    where: combinedWhere,
+  })
   const result = await findMany({
     adapter: this,
     collectionSlug: collection,

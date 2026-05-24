@@ -61,6 +61,8 @@ export const findMany = async function find({
   const orderedIDMap: Record<number | string, number> = {}
   let orderedIDs: (number | string)[]
 
+  console.log('joins: ', joins)
+  console.log('joinQuery: ', joinQuery)
   const findManyArgs = buildFindManyArgs({
     adapter,
     collectionSlug,
@@ -142,9 +144,9 @@ export const findMany = async function find({
       findManyArgs.where = where
     }
   }
-
   const findPromise = db.query[tableName].findMany(findManyArgs)
 
+  console.log('findPromise query: ', findPromise.toSQL().sql)
   if (pagination !== false && (orderedIDs ? orderedIDs?.length <= limit : true)) {
     totalDocs = await adapter.countDistinct({
       db,

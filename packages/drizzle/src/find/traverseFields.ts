@@ -747,7 +747,8 @@ export const traverseFields = ({
           }
 
           const subQuery = query.as(subQueryAlias)
-
+          const t = query.getSQL()
+          const v = subQuery.getSQL()
           if (shouldCount) {
             let countSubquery: SQLiteSelect = db
               .select(selectFields as any)

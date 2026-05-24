@@ -179,6 +179,21 @@ export const findOperation = async <
         where: appendVersionToQueryKey(where),
       })
 
+      console.log('Querying drafts with: ', {
+        collection: collectionConfig.slug,
+        joins: req.payloadAPI === 'GraphQL' ? false : sanitizedJoins,
+        limit: sanitizedLimit,
+        locale: locale!,
+        page: sanitizedPage,
+        pagination: usePagination,
+        req,
+        select: getQueryDraftsSelect({ select }),
+        sort: getQueryDraftsSort({
+          collectionConfig,
+          sort,
+        }),
+        where: fullWhere,
+      })
       result = await payload.db.queryDrafts<DataFromCollectionSlug<TSlug>>({
         collection: collectionConfig.slug,
         joins: req.payloadAPI === 'GraphQL' ? false : sanitizedJoins,
