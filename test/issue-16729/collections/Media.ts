@@ -19,6 +19,6 @@ export const Media: CollectionConfig = {
   upload: true,
   versions: {
     drafts: true,
-    maxPerDoc: 1,
+    maxPerDoc: 30,
   },
 }

@@ -1,7 +1,6 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
-import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
@@ -9,7 +8,6 @@ import { buildConfigWithDefaults } from '../buildConfigWithDefaults.js'
 import { Media } from './collections/Media'
 import { Users } from './collections/Users'
 
-console.log('dirname', import.meta.url)
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
