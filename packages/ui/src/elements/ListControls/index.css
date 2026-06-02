@@ -2,6 +2,8 @@
   .list-controls {
     display: flex;
     flex-direction: column;
+    padding: var(--spacer-2-5) var(--gutter-h);
+    border-bottom: var(--stroke-width-small) solid var(--color-border);
 
     .pill-selector,
     .where-builder,
@@ -67,7 +69,6 @@
       }
     }
 
-    .list-controls__toggle-columns,
     .list-controls__toggle-where,
     .list-controls__toggle-sort,
     .list-controls__toggle-group-by {

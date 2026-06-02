@@ -42,6 +42,7 @@ import { handleHierarchy } from './handleHierarchy.js'
 import { renderListViewSlots } from './renderListViewSlots.js'
 import { resolveAllFilterOptions } from './resolveAllFilterOptions.js'
 import { transformColumnsToSelect } from './transformColumnsToSelect.js'
+import './index.css'
 
 /**
  * @internal
@@ -386,6 +387,7 @@ export const renderListView = async (
 
   // Fetch hierarchy data only for hierarchy view
   let HierarchyIcon: React.ReactNode | undefined
+  let HierarchySmallIcon: React.ReactNode | undefined
   const isHierarchyView = viewType === 'hierarchy'
 
   if (isHierarchyCollection && isHierarchyView) {
@@ -419,6 +421,16 @@ export const renderListView = async (
       importMap: payload.importMap,
       key: `hierarchy-icon-${collectionSlug}`,
     })
+
+    const smallIconComponent = hierarchyConfig?.admin?.components?.SmallIcon
+    HierarchySmallIcon =
+      smallIconComponent === hierarchyConfig?.admin?.components?.Icon
+        ? HierarchyIcon
+        : RenderServerComponent({
+            Component: smallIconComponent,
+            importMap: payload.importMap,
+            key: `hierarchy-small-icon-${collectionSlug}`,
+          })
   }
 
   const renderedFilters = renderFilters(collectionConfig.fields, req.payload.importMap)
@@ -462,6 +474,7 @@ export const renderListView = async (
     payload,
     permissions,
     searchParams,
+    server: req.server,
     user,
   }
 
@@ -501,6 +514,7 @@ export const renderListView = async (
       hasTrashPermission,
       hierarchyData,
       HierarchyIcon,
+      HierarchySmallIcon,
       listPreferences: collectionPreferences,
       newDocumentURL,
       queryPreset,
