@@ -151,21 +151,11 @@ export interface PayloadMcpApiKeyAuthOperations {
 export interface Post {
   id: number;
   title?: string | null;
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
+  content?:
+    | {
         [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -258,70 +248,22 @@ export interface PayloadMcpApiKey {
    * The purpose of the API key.
    */
   description?: string | null;
-  posts?: {
-    /**
-     * Allow clients to find posts.
-     */
-    find?: boolean | null;
-    /**
-     * Allow clients to create posts.
-     */
-    create?: boolean | null;
-    /**
-     * Allow clients to update posts.
-     */
-    update?: boolean | null;
-    /**
-     * Allow clients to delete posts.
-     */
-    delete?: boolean | null;
-  };
-  media?: {
-    /**
-     * Allow clients to find media.
-     */
-    find?: boolean | null;
-    /**
-     * Allow clients to create media.
-     */
-    create?: boolean | null;
-    /**
-     * Allow clients to update media.
-     */
-    update?: boolean | null;
-    /**
-     * Allow clients to delete media.
-     */
-    delete?: boolean | null;
-  };
-  users?: {
-    /**
-     * Allow clients to find users.
-     */
-    find?: boolean | null;
-    /**
-     * Allow clients to create users.
-     */
-    create?: boolean | null;
-    /**
-     * Allow clients to update users.
-     */
-    update?: boolean | null;
-    /**
-     * Allow clients to delete users.
-     */
-    delete?: boolean | null;
-  };
-  menu?: {
-    /**
-     * Allow clients to find menu global.
-     */
-    find?: boolean | null;
-    /**
-     * Allow clients to update menu global.
-     */
-    update?: boolean | null;
-  };
+  /**
+   * When checked, this key bypasses Payload access control on every operation it performs. Leave unchecked unless you have a specific reason.
+   */
+  overrideAccess?: boolean | null;
+  /**
+   * Access for this API key — uncheck to revoke individual tools.
+   */
+  access?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   updatedAt: string;
   createdAt: string;
   enableAPIKey?: boolean | null;
@@ -512,36 +454,8 @@ export interface PayloadMcpApiKeysSelect<T extends boolean = true> {
   user?: T;
   label?: T;
   description?: T;
-  posts?:
-    | T
-    | {
-        find?: T;
-        create?: T;
-        update?: T;
-        delete?: T;
-      };
-  media?:
-    | T
-    | {
-        find?: T;
-        create?: T;
-        update?: T;
-        delete?: T;
-      };
-  users?:
-    | T
-    | {
-        find?: T;
-        create?: T;
-        update?: T;
-        delete?: T;
-      };
-  menu?:
-    | T
-    | {
-        find?: T;
-        update?: T;
-      };
+  overrideAccess?: T;
+  access?: T;
   updatedAt?: T;
   createdAt?: T;
   enableAPIKey?: T;
