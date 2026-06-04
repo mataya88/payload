@@ -39,9 +39,13 @@ it appears that when `createVersion` calls `upsertRow`, the `transformForWrite` 
 this is because the `traverseFields` before write directly stringifies and plugs the incoming `point` value into the postgres `ST_GeomFromGeoJSON` function
 it clearly assumes the incoming data is in the form `{ type: 'Point', coordinates: [1,2]}`
 
-fix: if the later assumption is incorrect, adding the transformation lines above in `traversFields` before write is a valid fix
-if the assumption is correct, there should be something that retransforms the `point` between updating the document and creating the version
-maybe we can insert a fields traverse function before `saveVersion` call in `update.ts`
+### Fix
+
+- If the assumption about the above function (`traverseFields` before write) is incorrect, adding the transformation lines above inside `traversFields` will be a valid fix
+  - But i believe the assumption is correct, so there should be something that retransforms the `point` between updating the document and creating the version
+  - Also `traverseFields` inside the `upsertRow` has much wider use cases than creating a version.
+- We may insert a fields traverse function before `saveVersion` call in `update.ts`
+- A probably better idea is to run a function inside `createVersion` that prepares the `versionData` by traversing the fields and transforming all `point` fields. For example call it `prepareVersionData`. However, this new function should be handled carefully as failing to do so can break data integrity.
 
 why not update the `transform` function inside `upsertRow` after the sql call?
 because this is a tranform for read. it returns the data in the form to be returned to the client.
