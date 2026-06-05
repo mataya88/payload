@@ -50,3 +50,11 @@ it clearly assumes the incoming data is in the form `{ type: 'Point', coordinate
 why not update the `transform` function inside `upsertRow` after the sql call?
 because this is a tranform for read. it returns the data in the form to be returned to the client.
 this also means that the output of the `updateOne` function should not be tampered
+
+### P.S.
+
+- New findings after implementing the last fix:
+- This error does not happen with complex collections. Just adding localization prevents this error.
+- The reason is that the `upsertRow` function only uses sql `returning` to return data when the the collection is simple.
+- In any other case, `upsertRow` retrieves the document in a separate step, which returns correct GeoJson.
+- A one-line fix would be adding document retrieval and ditching sql `returning`
