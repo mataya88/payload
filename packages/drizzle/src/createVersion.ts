@@ -40,12 +40,7 @@ export async function createVersion<T extends JsonObject = JsonObject>(
 
   const fields = buildVersionCollectionFields(this.payload.config, collection, true)
 
-  const readyVersionData = prepareVersionData({
-    adapter: this,
-    collectionFields: fields,
-    versionData,
-  })
-  const version = { ...readyVersionData }
+  const version = { ...versionData }
   if (version.id) {
     delete version.id
   }

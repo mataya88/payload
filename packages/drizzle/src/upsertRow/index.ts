@@ -140,6 +140,7 @@ export const upsertRow = async <T extends Record<string, unknown> | TypeWithID>(
       if (findManyKeysLength === 0 || hasOnlyColumns) {
         // Optimization - No need for joins => can simply use returning(). This is optimal for very simple collections
         // without complex fields that live in separate tables like blocks, arrays, relationships, etc.
+        // update: returning() returns point fields as an array of numbers rather than GeoJson, which breaks the version creation call
 
         const selectedFields: SelectedFields = {}
         if (hasOnlyColumns) {
@@ -150,16 +151,18 @@ export const upsertRow = async <T extends Record<string, unknown> | TypeWithID>(
           }
         }
 
-        const docs = await drizzle
+        await drizzle
           .update(adapter.tables[tableName])
           .set(row)
           .where(eq(adapter.tables[tableName].id, id))
           .returning(Object.keys(selectedFields).length ? selectedFields : undefined)
 
+        const doc = await db.query[tableName].findFirst(findManyArgs)
+
         return transform<T>({
           adapter,
           config: adapter.payload.config,
-          data: docs[0],
+          data: doc,
           fields,
           joinQuery: false,
           tableName,
