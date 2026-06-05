@@ -58,3 +58,7 @@ this also means that the output of the `updateOne` function should not be tamper
 - The reason is that the `upsertRow` function only uses sql `returning` to return data when the the collection is simple.
 - In any other case, `upsertRow` retrieves the document in a separate step, which returns correct GeoJson.
 - A one-line fix would be adding document retrieval and ditching sql `returning`
+
+- maybe i can investigate more why drizzle returns the geo point as an array
+- Possible Fix: add point fields to `shouldUseOptimizeUpsertRow` to prevent using sql `returning`
+- Possible Fix: Ran a check before the `returning` to skip it if a `point` field is found

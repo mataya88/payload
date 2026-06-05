@@ -28,7 +28,6 @@ describe('Issue #16729 - Update coordinates', () => {
     })
     const media = await payload.create({
       collection: 'media',
-      locale,
       data: {
         alt: 'Test Media',
         point: [40.7128, -74.006],
@@ -87,10 +86,10 @@ describe('Issue #16729 - Update coordinates', () => {
     const updatedMedia = await payload.update({
       collection: 'media',
       id: media.id,
-      locale,
       select: {
         id: true,
-        point: true,
+        alt: true,
+        point: false,
       },
       data: {
         alt: 'Updated Test Media',
@@ -103,11 +102,9 @@ describe('Issue #16729 - Update coordinates', () => {
     const retrievedMedia = await payload.findByID({
       collection: 'media',
       id: media.id,
-      locale,
     })
     const mediaVersion = await payload.findVersions({
       collection: 'media',
-      locale,
       where: {
         parent: {
           equals: media.id,
