@@ -10,6 +10,7 @@ import type { DrizzleAdapter } from './types.js'
 import { upsertRow } from './upsertRow/index.js'
 import { getPrimaryDb } from './utilities/getPrimaryDb.js'
 import { getTransaction } from './utilities/getTransaction.js'
+import { prepareVersionData } from './utilities/prepareVersionData.js'
 
 export async function createVersion<T extends JsonObject = JsonObject>(
   this: DrizzleAdapter,
@@ -37,7 +38,14 @@ export async function createVersion<T extends JsonObject = JsonObject>(
   const defaultTableName = toSnakeCase(collection.slug)
   const tableName = this.tableNameMap.get(`_${defaultTableName}${this.versionsSuffix}`)
 
-  const version = { ...versionData }
+  const fields = buildVersionCollectionFields(this.payload.config, collection, true)
+
+  const readyVersionData = prepareVersionData({
+    adapter: this,
+    collectionFields: fields,
+    versionData,
+  })
+  const version = { ...readyVersionData }
   if (version.id) {
     delete version.id
   }
@@ -60,7 +68,7 @@ export async function createVersion<T extends JsonObject = JsonObject>(
     collectionSlug,
     data,
     db,
-    fields: buildVersionCollectionFields(this.payload.config, collection, true),
+    fields,
     ignoreResult: returning === false ? 'idOnly' : undefined,
     operation: 'create',
     req,

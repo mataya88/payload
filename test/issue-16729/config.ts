@@ -31,4 +31,8 @@ export default buildConfigWithDefaults({
   }),
   sharp,
   plugins: [],
+  localization: {
+    locales: ['en', 'ar'],
+    defaultLocale: 'en',
+  },
 })

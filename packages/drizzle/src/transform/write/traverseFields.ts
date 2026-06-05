@@ -779,12 +779,6 @@ export const traverseFields = ({
 
       if (typeof value !== 'undefined') {
         if (value && field.type === 'point' && adapter.name !== 'sqlite') {
-          if (Array.isArray(value) && value[0] !== null && value[1] !== null) {
-            value = {
-              type: 'Point',
-              coordinates: [parseFloat(value[0]), parseFloat(value[1])],
-            }
-          }
           formattedValue = sql`ST_GeomFromGeoJSON(${JSON.stringify(value)})`
         }
 
